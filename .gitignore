@@ -1,0 +1,26 @@
+
+# Arquivos compilados pelo Delphi
+Win32/
+Win64/
+*.dcu
+*.exe
+*.map
+*.identcache
+
+# Configurações locais da IDE
+*.dproj.local
+*.local
+*.stat
+
+# Histórico e backups
+__history/
+*.~*
+*.bak
+
+# Bancos de dados e backups
+*.fdb
+*.fbk
+
+# Configurações privadas
+.env
+*.local.ini
