@@ -21,4 +21,33 @@ object dmPrincipal: TdmPrincipal
     Left = 152
     Top = 24
   end
+  object qryTarefas: TFDQuery
+    Connection = conBanco
+    SQL.Strings = (
+      'INSERT INTO TAREFAS ('
+      '    TITULO,'
+      '    DESCRICAO,'
+      '    CATEGORIA_ID'
+      ')'
+      'VALUES ('
+      '    :TITULO,'
+      '    :DESCRICAO,'
+      '    :CATEGORIA_ID'
+      ')')
+    Left = 248
+    Top = 24
+    ParamData = <
+      item
+        Name = 'TITULO'
+        ParamType = ptInput
+      end
+      item
+        Name = 'DESCRICAO'
+        ParamType = ptInput
+      end
+      item
+        Name = 'CATEGORIA_ID'
+        ParamType = ptInput
+      end>
+  end
 end

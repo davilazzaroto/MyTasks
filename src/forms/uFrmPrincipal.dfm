@@ -11,7 +11,9 @@ object frmPrincipal: TfrmPrincipal
   Font.Height = -17
   Font.Name = 'Segoe UI'
   Font.Style = []
+  KeyPreview = True
   Position = poScreenCenter
+  OnKeyPress = FormKeyPress
   TextHeight = 23
   object lblTitulo: TLabel
     Left = 40
@@ -27,6 +29,13 @@ object frmPrincipal: TfrmPrincipal
     Height = 23
     Caption = 'Descri'#231#227'o'
   end
+  object lblCategoria: TLabel
+    Left = 400
+    Top = 24
+    Width = 74
+    Height = 23
+    Caption = 'Categoria'
+  end
   object edtTitulo: TEdit
     Left = 40
     Top = 45
@@ -37,10 +46,10 @@ object frmPrincipal: TfrmPrincipal
   end
   object memDescricao: TMemo
     Left = 40
-    Top = 119
+    Top = 125
     Width = 300
     Height = 89
-    TabOrder = 1
+    TabOrder = 2
   end
   object btnSalvar: TButton
     Left = 40
@@ -49,7 +58,7 @@ object frmPrincipal: TfrmPrincipal
     Height = 32
     Cursor = crHandPoint
     Caption = 'Salvar'
-    TabOrder = 2
+    TabOrder = 3
     OnClick = btnSalvarClick
   end
   object btnExcluir: TButton
@@ -59,7 +68,7 @@ object frmPrincipal: TfrmPrincipal
     Height = 32
     Cursor = crHandPoint
     Caption = 'Excluir'
-    TabOrder = 3
+    TabOrder = 5
   end
   object btnEditar: TButton
     Left = 168
@@ -77,6 +86,14 @@ object frmPrincipal: TfrmPrincipal
     Height = 32
     Cursor = crHandPoint
     Caption = 'Limpar'
-    TabOrder = 5
+    TabOrder = 6
+    OnClick = btnLimparClick
+  end
+  object edtCategoriaId: TEdit
+    Left = 400
+    Top = 45
+    Width = 300
+    Height = 31
+    TabOrder = 1
   end
 end
