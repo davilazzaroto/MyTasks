@@ -15,6 +15,10 @@ type
     conBanco: TFDConnection;
     drvFirebird: TFDPhysFBDriverLink;
     qryTarefas: TFDQuery;
+    qryListarTarefas: TFDQuery;
+    dsTarefas: TDataSource;
+    qryExcluirTarefa: TFDQuery;
+    qryAtualizarTarefa: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

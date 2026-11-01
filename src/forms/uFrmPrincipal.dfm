@@ -14,6 +14,7 @@ object frmPrincipal: TfrmPrincipal
   KeyPreview = True
   Position = poScreenCenter
   OnKeyPress = FormKeyPress
+  OnShow = FormShow
   TextHeight = 23
   object lblTitulo: TLabel
     Left = 40
@@ -69,6 +70,7 @@ object frmPrincipal: TfrmPrincipal
     Cursor = crHandPoint
     Caption = 'Excluir'
     TabOrder = 5
+    OnClick = btnExcluirClick
   end
   object btnEditar: TButton
     Left = 168
@@ -78,6 +80,7 @@ object frmPrincipal: TfrmPrincipal
     Cursor = crHandPoint
     Caption = 'Editar'
     TabOrder = 4
+    OnClick = btnEditarClick
   end
   object btnLimpar: TButton
     Left = 424
@@ -95,5 +98,62 @@ object frmPrincipal: TfrmPrincipal
     Width = 300
     Height = 31
     TabOrder = 1
+  end
+  object dbgTarefas: TDBGrid
+    Left = 40
+    Top = 288
+    Width = 660
+    Height = 161
+    DataSource = dmPrincipal.dsTarefas
+    ReadOnly = True
+    TabOrder = 7
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -17
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID'
+        Title.Caption = 'C'#243'digo'
+        Width = 55
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TITULO'
+        Title.Caption = 'T'#237'tulo da tarefa'
+        Width = 190
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DESCRICAO'
+        Title.Caption = 'Descri'#231#227'o'
+        Width = 230
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CATEGORIA_ID'
+        Title.Caption = 'Categoria'
+        Width = 75
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CONCLUIDA'
+        Title.Caption = 'Concluida'
+        Width = 70
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DATA_CRIACAO'
+        Title.Caption = 'Data de cria'#231#227'o'
+        Width = 120
+        Visible = True
+      end>
   end
 end
