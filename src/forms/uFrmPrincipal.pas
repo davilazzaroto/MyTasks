@@ -36,16 +36,18 @@ type
     procedure AtualizarTarefa(ACategoriaId: Integer);
 
   public
-    { Public declarations }
   end;
+
+
 
 var
   frmPrincipal: TfrmPrincipal;
 
 implementation
 
+
 uses
-  uDmPrincipal;
+  uDmPrincipal, uValidacoes;
 
 {$R *.dfm}
 
@@ -126,7 +128,8 @@ begin
     Exit;
   end;
    // Obtém o código da tarefa selecionada
-  TarefaId := dmPrincipal.qryListarTarefas.FieldByName('ID').AsInteger;
+  TarefaId :=
+    dmPrincipal.qryListarTarefas.FieldByName('ID').AsInteger;
 
    // Solicita confirmação antes de excluir
   if MessageDlg(
@@ -169,16 +172,31 @@ var
   CategoriaId: Integer;
   EstavaEditando: Boolean;
 begin
-  // Valida se o título foi informado
-  if Trim(edtTitulo.Text) = '' then
+  // Verifica se o título foi preenchido.
+  if not TextoObrigatorio(edtTitulo.Text) then
   begin
     ShowMessage('Informe o título da tarefa.');
     edtTitulo.SetFocus;
     Exit;
   end;
+  // Verifica se o título respeita o tamanho permitido no banco.
+  if not TextoDentroLimite(edtTitulo.Text, 100) then
+  begin
+    ShowMessage('O título deve ter no máximo 100 caracteres.');
+    edtTitulo.SetFocus;
+    Exit;
+  end;
+
+  // Verifica se a descrição respeita o tamanho permitido no banco.
+  if not TextoDentroLimite(memDescricao.Text, 500) then
+  begin
+    ShowMessage('A descrição deve ter no máximo 500 caracteres.');
+    memDescricao.SetFocus;
+    Exit;
+  end;
 
   // Valida se a categoria foi informada
-  if Trim(edtCategoriaId.Text) = '' then
+  if not TextoObrigatorio(edtCategoriaId.Text) then
   begin
     ShowMessage('Informe o código da categoria.');
     edtCategoriaId.SetFocus;
@@ -186,20 +204,25 @@ begin
   end;
 
   // Valida se o código da categoria é um inteiro positivo
-  if not TryStrToInt(Trim(edtCategoriaId.Text), CategoriaId) then
+  if not InteiroPositivoValido(edtCategoriaId.Text) then
   begin
-    ShowMessage('O código da categoria deve ser numérico.');
+    ShowMessage('Informe um código de categoria inteiro e maior que zero.');
     edtCategoriaId.SetFocus;
     Exit;
   end;
 
-  if CategoriaId <= 0 then
+  // Converte o código após confirmar que ele é válido.
+  CategoriaId := StrToInt(Trim(edtCategoriaId.Text));
+
+  // Verifica se a categoria informada existe no banco.
+  if not dmPrincipal.CategoriaExiste(CategoriaId) then
   begin
-    ShowMessage('Informe um código de categoria válido.');
+    ShowMessage('A categoria informada não está cadastrada.');
     edtCategoriaId.SetFocus;
     Exit;
   end;
 
+  // Guarda o modo atual antes de limpar os campos.
   EstavaEditando := FModoEdicao;
 
   try

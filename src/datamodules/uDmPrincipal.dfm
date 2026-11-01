@@ -115,4 +115,18 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
   end
+  object qryVerificarCategoria: TFDQuery
+    Connection = conBanco
+    SQL.Strings = (
+      'SELECT ID'
+      'FROM CATEGORIAS'
+      'WHERE ID = :ID')
+    Left = 800
+    Top = 24
+    ParamData = <
+      item
+        Name = 'ID'
+        ParamType = ptInput
+      end>
+  end
 end

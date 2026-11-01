@@ -19,11 +19,12 @@ type
     dsTarefas: TDataSource;
     qryExcluirTarefa: TFDQuery;
     qryAtualizarTarefa: TFDQuery;
+    qryVerificarCategoria: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
   public
-    { Public declarations }
+    function CategoriaExiste(ACategoriaId: Integer): Boolean;
   end;
 
 var
@@ -34,6 +35,22 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+function TdmPrincipal.CategoriaExiste(ACategoriaId: Integer): Boolean;
+begin
+  with qryVerificarCategoria do
+  begin
+    Close;
+
+    ParamByName('ID').AsInteger := ACategoriaId;
+    Open;
+
+    // Retorna verdadeiro quando a categoria é encontrada.
+    Result := not IsEmpty;
+
+    Close;
+  end;
+end;
 
 procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
 var

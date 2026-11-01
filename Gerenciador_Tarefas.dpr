@@ -5,7 +5,8 @@ uses
   uFrmPrincipal in 'src\forms\uFrmPrincipal.pas' {frmPrincipal},
   Vcl.Themes,
   Vcl.Styles,
-  uDmPrincipal in 'src\datamodules\uDmPrincipal.pas' {dmPrincipal: TDataModule};
+  uDmPrincipal in 'src\datamodules\uDmPrincipal.pas' {dmPrincipal: TDataModule},
+  uValidacoes in 'src\utils\uValidacoes.pas';
 
 {$R *.res}
 

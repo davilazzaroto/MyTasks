@@ -50,11 +50,12 @@ object frmPrincipal: TfrmPrincipal
     Top = 125
     Width = 300
     Height = 89
+    MaxLength = 500
     TabOrder = 2
   end
   object btnSalvar: TButton
     Left = 40
-    Top = 224
+    Top = 220
     Width = 100
     Height = 32
     Cursor = crHandPoint
