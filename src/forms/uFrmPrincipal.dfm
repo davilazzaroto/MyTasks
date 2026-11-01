@@ -55,7 +55,7 @@ object frmPrincipal: TfrmPrincipal
   end
   object btnSalvar: TButton
     Left = 40
-    Top = 220
+    Top = 224
     Width = 100
     Height = 32
     Cursor = crHandPoint
@@ -104,7 +104,7 @@ object frmPrincipal: TfrmPrincipal
   object dbgTarefas: TDBGrid
     Left = 40
     Top = 288
-    Width = 660
+    Width = 769
     Height = 161
     DataSource = dmPrincipal.dsTarefas
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -120,7 +120,7 @@ object frmPrincipal: TfrmPrincipal
         Expanded = False
         FieldName = 'ID'
         Title.Caption = 'C'#243'digo'
-        Width = 55
+        Width = 63
         Visible = True
       end
       item
@@ -134,29 +134,38 @@ object frmPrincipal: TfrmPrincipal
         Expanded = False
         FieldName = 'DESCRICAO'
         Title.Caption = 'Descri'#231#227'o'
-        Width = 230
+        Width = 180
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'CATEGORIA_ID'
         Title.Caption = 'Categoria'
-        Width = 75
+        Width = 88
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'CONCLUIDA'
         Title.Caption = 'Concluida'
-        Width = 70
+        Width = 85
         Visible = True
       end
       item
         Expanded = False
         FieldName = 'DATA_CRIACAO'
         Title.Caption = 'Data de cria'#231#227'o'
-        Width = 120
+        Width = 138
         Visible = True
       end>
+  end
+  object btnCategorias: TButton
+    Left = 726
+    Top = 45
+    Width = 100
+    Height = 32
+    Caption = 'Categorias'
+    TabOrder = 8
+    OnClick = btnCategoriasClick
   end
 end

@@ -140,6 +140,10 @@
             <Form>frmConsultaCategorias</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\forms\uFrmCategorias.pas">
+            <Form>frmCategorias</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -20,6 +20,7 @@ type
     lblCategoria: TLabel;
     edtCategoriaId: TEdit;
     dbgTarefas: TDBGrid;
+    btnCategorias: TButton;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -27,6 +28,7 @@ type
     procedure btnExcluirClick(Sender: TObject);
     procedure btnEditarClick(Sender: TObject);
     procedure edtCategoriaIdDblClick(Sender: TObject);
+    procedure btnCategoriasClick(Sender: TObject);
   private
     FTarefaIdEdicao: Integer;
     FModoEdicao: Boolean;
@@ -48,7 +50,8 @@ implementation
 
 
 uses
-  uDmPrincipal, uValidacoes,uFrmConsultaCategorias;
+  uDmPrincipal, uValidacoes,uFrmConsultaCategorias,
+  uFrmCategorias;
 
 {$R *.dfm}
 
@@ -58,8 +61,8 @@ begin
   edtCategoriaId.Clear;
   memDescricao.Clear;
 
-  FTarefaIdEdicao := 0;
-  FModoEdicao := False;
+  // Retorna o botão ao modo de cadastro.
+  btnSalvar.Caption := 'Salvar';
 
   edtTitulo.SetFocus;
 end;
@@ -109,6 +112,17 @@ begin
   end;
 end;
 
+procedure TfrmPrincipal.btnCategoriasClick(Sender: TObject);
+begin
+  // Abre o cadastro de categorias em uma janela modal.
+  with TfrmCategorias.Create(Self) do
+  try
+    ShowModal;
+  finally
+    Free;
+  end;
+end;
+
 procedure TfrmPrincipal.btnEditarClick(Sender: TObject);
 
 begin
@@ -130,6 +144,9 @@ begin
     dmPrincipal.qryListarTarefas.FieldByName('DESCRICAO').AsString;
 
   FModoEdicao := True;
+
+  // Indica que o formulário está em modo de edição.
+  btnSalvar.Caption := 'Atualizar';
 
   edtTitulo.SetFocus;
 end;

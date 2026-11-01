@@ -51,6 +51,7 @@ object dmPrincipal: TdmPrincipal
       end>
   end
   object qryListarTarefas: TFDQuery
+    BeforeDelete = qryListarTarefasBeforeDelete
     Connection = conBanco
     SQL.Strings = (
       'SELECT'
@@ -140,8 +141,8 @@ object dmPrincipal: TdmPrincipal
       '    UPPER(NOME) LIKE :PESQUISA'
       '    OR CAST(ID AS VARCHAR(20)) LIKE :PESQUISA'
       'ORDER BY NOME')
-    Left = 344
-    Top = 104
+    Left = 232
+    Top = 120
     ParamData = <
       item
         Name = 'PESQUISA'
@@ -150,7 +151,85 @@ object dmPrincipal: TdmPrincipal
   end
   object dsCategorias: TDataSource
     DataSet = qryListarCategorias
-    Left = 464
-    Top = 104
+    Left = 360
+    Top = 120
+  end
+  object qryCadastrarCategoria: TFDQuery
+    Connection = conBanco
+    SQL.Strings = (
+      'INSERT INTO CATEGORIAS ('
+      '    NOME,'
+      '    DESCRICAO'
+      ')'
+      'VALUES ('
+      '    :NOME,'
+      '    :DESCRICAO'
+      ')')
+    Left = 496
+    Top = 120
+    ParamData = <
+      item
+        Name = 'NOME'
+        ParamType = ptInput
+      end
+      item
+        Name = 'DESCRICAO'
+        ParamType = ptInput
+      end>
+  end
+  object qryListarCategoriasCadastro: TFDQuery
+    BeforeDelete = qryListarCategoriasCadastroBeforeDelete
+    Connection = conBanco
+    SQL.Strings = (
+      'SELECT'
+      '    ID,'
+      '    NOME,'
+      '    DESCRICAO'
+      'FROM CATEGORIAS'
+      'ORDER BY ID DESC')
+    Left = 496
+    Top = 240
+  end
+  object dsCategoriasCadastro: TDataSource
+    DataSet = qryListarCategoriasCadastro
+    Left = 304
+    Top = 248
+  end
+  object qryAtualizarCategoria: TFDQuery
+    Connection = conBanco
+    SQL.Strings = (
+      'UPDATE CATEGORIAS'
+      'SET'
+      '    NOME = :NOME,'
+      '    DESCRICAO = :DESCRICAO'
+      'WHERE ID = :ID')
+    Left = 272
+    Top = 336
+    ParamData = <
+      item
+        Name = 'NOME'
+        ParamType = ptInput
+      end
+      item
+        Name = 'DESCRICAO'
+        ParamType = ptInput
+      end
+      item
+        Name = 'ID'
+        ParamType = ptInput
+      end>
+  end
+  object qryExcluirCategoria: TFDQuery
+    Connection = conBanco
+    SQL.Strings = (
+      'DELETE FROM CATEGORIAS'
+      'WHERE ID = :ID')
+    Left = 440
+    Top = 344
+    ParamData = <
+      item
+        Name = 'ID'
+        ParamType = ptInput
+      end>
   end
 end

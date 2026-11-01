@@ -22,7 +22,14 @@ type
     qryVerificarCategoria: TFDQuery;
     qryListarCategorias: TFDQuery;
     dsCategorias: TDataSource;
+    qryCadastrarCategoria: TFDQuery;
+    qryListarCategoriasCadastro: TFDQuery;
+    dsCategoriasCadastro: TDataSource;
+    qryAtualizarCategoria: TFDQuery;
+    qryExcluirCategoria: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
+    procedure qryListarCategoriasCadastroBeforeDelete(DataSet: TDataSet);
+    procedure qryListarTarefasBeforeDelete(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -77,4 +84,17 @@ begin
 
       end;
     end;
+procedure TdmPrincipal.qryListarCategoriasCadastroBeforeDelete(
+  DataSet: TDataSet);
+begin
+  // Impede exclusões realizadas diretamente pelo DBGrid.
+  Abort;
+end;
+
+procedure TdmPrincipal.qryListarTarefasBeforeDelete(DataSet: TDataSet);
+begin
+  // Impedir exclusões realizadas diretamente pelo DBGrid.
+  Abort
+end;
+
 end.
