@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids;
+  Vcl.DBGrids, Vcl.Menus;
 
 type
   TfrmPrincipal = class(TForm)
@@ -21,6 +21,11 @@ type
     edtCategoriaId: TEdit;
     dbgTarefas: TDBGrid;
     btnCategorias: TButton;
+    cmbFiltroStatus: TComboBox;
+    lblFiltrar: TLabel;
+    popTarefas: TPopupMenu;
+    mnuConcluir: TMenuItem;
+    mnuReabrir: TMenuItem;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -29,15 +34,21 @@ type
     procedure btnEditarClick(Sender: TObject);
     procedure edtCategoriaIdDblClick(Sender: TObject);
     procedure btnCategoriasClick(Sender: TObject);
+    procedure cmbFiltroStatusChange(Sender: TObject);
+    procedure mnuConcluirClick(Sender: TObject);
+    procedure mnuReabrirClick(Sender: TObject);
+    procedure popTarefasPopup(Sender: TObject);
   private
     FTarefaIdEdicao: Integer;
     FModoEdicao: Boolean;
 
     procedure LimparCampos;
 
+
     procedure CadastrarTarefa(ACategoriaId: Integer);
     procedure AtualizarTarefa(ACategoriaId: Integer);
-
+    procedure AtualizarListagem;
+    procedure AlterarStatusTarefa(ANovoStatus: Integer);
   public
   end;
 
@@ -67,9 +78,40 @@ begin
   edtTitulo.SetFocus;
 end;
 
+procedure TfrmPrincipal.mnuConcluirClick(Sender: TObject);
+begin
+  AlterarStatusTarefa(1);
+end;
+
+procedure TfrmPrincipal.mnuReabrirClick(Sender: TObject);
+begin
+  AlterarStatusTarefa(0);
+end;
+
+procedure TfrmPrincipal.popTarefasPopup(Sender: TObject);
+begin
+var
+  Concluida: Boolean;
+begin
+  if dmPrincipal.qryListarTarefas.IsEmpty then
+  begin
+    mnuConcluir.Enabled := False;
+    mnuReabrir.Enabled := False;
+    Exit;
+  end;
+
+  Concluida :=
+    dmPrincipal.qryListarTarefas.FieldByName('CONCLUIDA').AsInteger = 1;
+
+  // Habilita apenas a operação adequada ao status atual.
+  mnuConcluir.Enabled := not Concluida;
+  mnuReabrir.Enabled := Concluida;
+end;
+end;
+
 procedure TfrmPrincipal.CadastrarTarefa(ACategoriaId: Integer);
 begin
-  with dmPrincipal.qryTarefas do
+  with dmPrincipal.qryCadastrarTarefas do
   begin
     Close;
 
@@ -79,6 +121,11 @@ begin
 
     ExecSQL;
   end;
+end;
+
+procedure TfrmPrincipal.cmbFiltroStatusChange(Sender: TObject);
+begin
+  AtualizarListagem;
 end;
 
 procedure TfrmPrincipal.edtCategoriaIdDblClick(Sender: TObject);
@@ -109,6 +156,90 @@ begin
     ParamByName('CATEGORIA_ID').AsInteger := ACategoriaId;
 
     ExecSQL;
+  end;
+end;
+procedure TfrmPrincipal.AtualizarListagem;
+var
+  StatusFiltro: Integer;
+begin
+  // Identifica o filtro selecionado no ComboBox.
+  case cmbFiltroStatus.ItemIndex of
+    1: StatusFiltro := 0;  // Pendentes
+    2: StatusFiltro := 1;  // Concluídas
+  else
+    StatusFiltro := -1;    // Todas
+  end;
+
+  // Recarrega a listagem aplicando o filtro.
+  with dmPrincipal.qryListarTarefas do
+  begin
+    Close;
+    ParamByName('STATUS').AsInteger := StatusFiltro;
+    Open;
+  end;
+end;
+
+procedure TfrmPrincipal.AlterarStatusTarefa(ANovoStatus: Integer);
+var
+  TarefaId: Integer;
+  Mensagem: string;
+begin
+  // Verifica se existe uma tarefa selecionada.
+  if dmPrincipal.qryListarTarefas.IsEmpty then
+  begin
+    ShowMessage('Selecione uma tarefa.');
+    Exit;
+  end;
+
+  TarefaId :=
+    dmPrincipal.qryListarTarefas.FieldByName('ID').AsInteger;
+
+  // Verifica se a tarefa já possui o status solicitado.
+  if dmPrincipal.qryListarTarefas.FieldByName('CONCLUIDA').AsInteger =
+    ANovoStatus then
+  begin
+    ShowMessage('A tarefa já está nessa situação.');
+    Exit;
+  end;
+
+  // Define a mensagem conforme a operação.
+  if ANovoStatus = 1 then
+    Mensagem := 'Deseja realmente concluir esta tarefa?'
+  else
+    Mensagem := 'Deseja realmente reabrir esta tarefa?';
+
+  // Solicita confirmação antes de alterar.
+  if MessageDlg(
+    Mensagem,
+    mtConfirmation,
+    [mbYes, mbNo],
+    0
+  ) <> mrYes then
+    Exit;
+
+  try
+    // Atualiza o status da tarefa no banco.
+    with dmPrincipal.qryAlterarStatusTarefa do
+    begin
+      Close;
+
+      ParamByName('ID').AsInteger := TarefaId;
+      ParamByName('CONCLUIDA').AsInteger := ANovoStatus;
+
+      ExecSQL;
+    end;
+
+    // Atualiza a listagem mantendo o filtro selecionado.
+    AtualizarListagem;
+
+    if ANovoStatus = 1 then
+      ShowMessage('Tarefa concluída com sucesso!')
+    else
+      ShowMessage('Tarefa reaberta com sucesso!');
+
+  except
+    on E: Exception do
+      ShowMessage('Erro ao alterar situação da tarefa: ' + E.Message);
   end;
 end;
 
@@ -182,8 +313,7 @@ begin
     end;
 
     // Atualiza a listagem
-    dmPrincipal.qryListarTarefas.Close;
-    dmPrincipal.qryListarTarefas.Open;
+    AtualizarListagem;
 
     LimparCampos;
 
@@ -267,8 +397,7 @@ begin
       CadastrarTarefa(CategoriaId);
 
     // Atualiza os registros exibidos no DBGrid
-    dmPrincipal.qryListarTarefas.Close;
-    dmPrincipal.qryListarTarefas.Open;
+    AtualizarListagem;
 
     LimparCampos;
 
@@ -298,7 +427,7 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
-  dmPrincipal.qryListarTarefas.Open;
+  AtualizarListagem;
 end;
 
 end.

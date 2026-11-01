@@ -37,6 +37,13 @@ object frmPrincipal: TfrmPrincipal
     Height = 23
     Caption = 'Categoria'
   end
+  object lblFiltrar: TLabel
+    Left = 635
+    Top = 192
+    Width = 150
+    Height = 23
+    Caption = 'Filtrar'
+  end
   object edtTitulo: TEdit
     Left = 40
     Top = 45
@@ -105,9 +112,10 @@ object frmPrincipal: TfrmPrincipal
     Left = 40
     Top = 288
     Width = 769
-    Height = 161
+    Height = 209
     DataSource = dmPrincipal.dsTarefas
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+    PopupMenu = popTarefas
     ReadOnly = True
     TabOrder = 7
     TitleFont.Charset = DEFAULT_CHARSET
@@ -146,9 +154,9 @@ object frmPrincipal: TfrmPrincipal
       end
       item
         Expanded = False
-        FieldName = 'CONCLUIDA'
-        Title.Caption = 'Concluida'
-        Width = 85
+        FieldName = 'STATUS_TAREFA'
+        Title.Caption = 'Situa'#231#227'o'
+        Width = 100
         Visible = True
       end
       item
@@ -167,5 +175,31 @@ object frmPrincipal: TfrmPrincipal
     Caption = 'Categorias'
     TabOrder = 8
     OnClick = btnCategoriasClick
+  end
+  object cmbFiltroStatus: TComboBox
+    Left = 635
+    Top = 224
+    Width = 150
+    Height = 31
+    Style = csDropDownList
+    TabOrder = 9
+    OnChange = cmbFiltroStatusChange
+    Items.Strings = (
+      'Todas'
+      'Pendentes '
+      'Conclu'#237'das')
+  end
+  object popTarefas: TPopupMenu
+    OnPopup = popTarefasPopup
+    Left = 792
+    Top = 256
+    object mnuConcluir: TMenuItem
+      Caption = 'Concluir tarefa'
+      OnClick = mnuConcluirClick
+    end
+    object mnuReabrir: TMenuItem
+      Caption = 'Reabrir tarefa'
+      OnClick = mnuReabrirClick
+    end
   end
 end

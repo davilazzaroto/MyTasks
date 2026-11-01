@@ -14,7 +14,7 @@ type
   TdmPrincipal = class(TDataModule)
     conBanco: TFDConnection;
     drvFirebird: TFDPhysFBDriverLink;
-    qryTarefas: TFDQuery;
+    qryCadastrarTarefas: TFDQuery;
     qryListarTarefas: TFDQuery;
     dsTarefas: TDataSource;
     qryExcluirTarefa: TFDQuery;
@@ -27,6 +27,7 @@ type
     dsCategoriasCadastro: TDataSource;
     qryAtualizarCategoria: TFDQuery;
     qryExcluirCategoria: TFDQuery;
+    qryAlterarStatusTarefa: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure qryListarCategoriasCadastroBeforeDelete(DataSet: TDataSet);
     procedure qryListarTarefasBeforeDelete(DataSet: TDataSet);
