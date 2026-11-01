@@ -6,7 +6,8 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   uDmPrincipal in 'src\datamodules\uDmPrincipal.pas' {dmPrincipal: TDataModule},
-  uValidacoes in 'src\utils\uValidacoes.pas';
+  uValidacoes in 'src\utils\uValidacoes.pas',
+  uFrmConsultaCategorias in 'src\forms\uFrmConsultaCategorias.pas' {frmConsultaCategorias};
 
 {$R *.res}
 

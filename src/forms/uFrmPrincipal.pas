@@ -26,6 +26,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnExcluirClick(Sender: TObject);
     procedure btnEditarClick(Sender: TObject);
+    procedure edtCategoriaIdDblClick(Sender: TObject);
   private
     FTarefaIdEdicao: Integer;
     FModoEdicao: Boolean;
@@ -47,7 +48,7 @@ implementation
 
 
 uses
-  uDmPrincipal, uValidacoes;
+  uDmPrincipal, uValidacoes,uFrmConsultaCategorias;
 
 {$R *.dfm}
 
@@ -74,6 +75,22 @@ begin
     ParamByName('CATEGORIA_ID').AsInteger := ACategoriaId;
 
     ExecSQL;
+  end;
+end;
+
+procedure TfrmPrincipal.edtCategoriaIdDblClick(Sender: TObject);
+begin
+ // Cria a janela de consulta de categorias.
+  with TfrmConsultaCategorias.Create(Self) do
+  try
+    // Aguarda a seleção de uma categoria.
+    if ShowModal = mrOk then
+    begin
+      // Preenche o campo com o código selecionado.
+      edtCategoriaId.Text := IntToStr(CategoriaIdSelecionada);
+    end;
+  finally
+    Free;
   end;
 end;
 

@@ -129,4 +129,28 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
   end
+  object qryListarCategorias: TFDQuery
+    Connection = conBanco
+    SQL.Strings = (
+      'SELECT'
+      '    ID,'
+      '    NOME'
+      'FROM CATEGORIAS'
+      'WHERE'
+      '    UPPER(NOME) LIKE :PESQUISA'
+      '    OR CAST(ID AS VARCHAR(20)) LIKE :PESQUISA'
+      'ORDER BY NOME')
+    Left = 344
+    Top = 104
+    ParamData = <
+      item
+        Name = 'PESQUISA'
+        ParamType = ptInput
+      end>
+  end
+  object dsCategorias: TDataSource
+    DataSet = qryListarCategorias
+    Left = 464
+    Top = 104
+  end
 end

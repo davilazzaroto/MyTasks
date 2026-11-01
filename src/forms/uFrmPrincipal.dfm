@@ -99,6 +99,7 @@ object frmPrincipal: TfrmPrincipal
     Width = 300
     Height = 31
     TabOrder = 1
+    OnDblClick = edtCategoriaIdDblClick
   end
   object dbgTarefas: TDBGrid
     Left = 40
@@ -106,6 +107,7 @@ object frmPrincipal: TfrmPrincipal
     Width = 660
     Height = 161
     DataSource = dmPrincipal.dsTarefas
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
     ReadOnly = True
     TabOrder = 7
     TitleFont.Charset = DEFAULT_CHARSET

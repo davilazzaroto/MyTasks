@@ -136,6 +136,10 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="src\utils\uValidacoes.pas"/>
+        <DCCReference Include="src\forms\uFrmConsultaCategorias.pas">
+            <Form>frmConsultaCategorias</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

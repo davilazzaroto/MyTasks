@@ -20,6 +20,8 @@ type
     qryExcluirTarefa: TFDQuery;
     qryAtualizarTarefa: TFDQuery;
     qryVerificarCategoria: TFDQuery;
+    qryListarCategorias: TFDQuery;
+    dsCategorias: TDataSource;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
