@@ -5,7 +5,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids, Vcl.Menus, Vcl.ExtCtrls;
+  Vcl.DBGrids, Vcl.Menus, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
+  Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
+  Vcl.Imaging.pngimage;
 
 type
   TfrmPrincipal = class(TForm)
@@ -32,6 +34,14 @@ type
     cmbFiltroStatus: TComboBox;
     lblNomeSistema: TLabel;
     lblSubtitulo: TLabel;
+    pnlTituloCadastro: TPanel;
+    lblTituloCadastro: TLabel;
+    lblTarefasCadastradas: TLabel;
+    imgCollection: TImageCollection;
+    imgLista: TVirtualImageList;
+    imgCabecalho: TImage;
+    pnlRodape: TPanel;
+    lblRodape: TLabel;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -280,8 +290,7 @@ begin
 end;
 
 procedure TfrmPrincipal.btnCategoriasClick(Sender: TObject);
-begin
-  // Abre o cadastro de categorias em uma janela modal.
+begin  // Abre o cadastro de categorias em uma janela modal.
   with TfrmCategorias.Create(Self) do
   try
     ShowModal;
