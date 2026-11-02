@@ -38,6 +38,7 @@ type
     procedure mnuConcluirClick(Sender: TObject);
     procedure mnuReabrirClick(Sender: TObject);
     procedure popTarefasPopup(Sender: TObject);
+    procedure dbgTarefasDblClick(Sender: TObject);
   private
     FTarefaIdEdicao: Integer;
     FModoEdicao: Boolean;
@@ -62,7 +63,7 @@ implementation
 
 uses
   uDmPrincipal, uValidacoes,uFrmConsultaCategorias,
-  uFrmCategorias;
+  uFrmCategorias,uFrmDetalhesTarefa;
 
 {$R *.dfm}
 
@@ -126,6 +127,35 @@ end;
 procedure TfrmPrincipal.cmbFiltroStatusChange(Sender: TObject);
 begin
   AtualizarListagem;
+end;
+
+procedure TfrmPrincipal.dbgTarefasDblClick(Sender: TObject);
+begin
+  // Verifica se existe uma tarefa selecionada.
+  if dmPrincipal.qryListarTarefas.IsEmpty then
+  begin
+    ShowMessage('Selecione uma tarefa para visualizar.');
+    Exit;
+  end;
+
+  // Cria a janela de detalhes.
+  with TfrmDetalhesTarefa.Create(Self) do
+  try
+    // Envia as informações da tarefa selecionada.
+    CarregarTarefa(
+      dmPrincipal.qryListarTarefas.FieldByName('TITULO').AsString,
+      dmPrincipal.qryListarTarefas.FieldByName('CATEGORIA').AsString,
+      dmPrincipal.qryListarTarefas.FieldByName('STATUS_TAREFA').AsString,
+      dmPrincipal.qryListarTarefas.FieldByName('DESCRICAO').AsString,
+      dmPrincipal.qryListarTarefas.FieldByName('DATA_CRIACAO').AsDateTime
+    );
+
+    // Exibe a janela e aguarda o usuário fechá-la.
+    ShowModal;
+  finally
+    Free;
+  end;
+
 end;
 
 procedure TfrmPrincipal.edtCategoriaIdDblClick(Sender: TObject);

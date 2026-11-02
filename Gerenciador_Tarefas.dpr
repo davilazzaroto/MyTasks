@@ -8,7 +8,8 @@ uses
   uDmPrincipal in 'src\datamodules\uDmPrincipal.pas' {dmPrincipal: TDataModule},
   uValidacoes in 'src\utils\uValidacoes.pas',
   uFrmConsultaCategorias in 'src\forms\uFrmConsultaCategorias.pas' {frmConsultaCategorias},
-  uFrmCategorias in 'src\forms\uFrmCategorias.pas' {frmCategorias};
+  uFrmCategorias in 'src\forms\uFrmCategorias.pas' {frmCategorias},
+  uFrmDetalhesTarefa in 'src\forms\uFrmDetalhesTarefa.pas' {frmDetalhesTarefa};
 
 {$R *.res}
 

@@ -38,11 +38,11 @@ object frmPrincipal: TfrmPrincipal
     Caption = 'Categoria'
   end
   object lblFiltrar: TLabel
-    Left = 635
-    Top = 192
-    Width = 150
+    Left = 587
+    Top = 227
+    Width = 47
     Height = 23
-    Caption = 'Filtrar'
+    Caption = 'Filtrar:'
   end
   object edtTitulo: TEdit
     Left = 40
@@ -55,9 +55,10 @@ object frmPrincipal: TfrmPrincipal
   object memDescricao: TMemo
     Left = 40
     Top = 125
-    Width = 300
+    Width = 786
     Height = 89
     MaxLength = 500
+    ScrollBars = ssVertical
     TabOrder = 2
   end
   object btnSalvar: TButton
@@ -110,8 +111,8 @@ object frmPrincipal: TfrmPrincipal
   end
   object dbgTarefas: TDBGrid
     Left = 40
-    Top = 288
-    Width = 769
+    Top = 294
+    Width = 786
     Height = 209
     DataSource = dmPrincipal.dsTarefas
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -123,6 +124,7 @@ object frmPrincipal: TfrmPrincipal
     TitleFont.Height = -17
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
+    OnDblClick = dbgTarefasDblClick
     Columns = <
       item
         Expanded = False
@@ -177,9 +179,9 @@ object frmPrincipal: TfrmPrincipal
     OnClick = btnCategoriasClick
   end
   object cmbFiltroStatus: TComboBox
-    Left = 635
-    Top = 224
-    Width = 150
+    Left = 651
+    Top = 227
+    Width = 158
     Height = 31
     Style = csDropDownList
     TabOrder = 9

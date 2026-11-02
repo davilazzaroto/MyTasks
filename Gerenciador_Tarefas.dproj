@@ -144,6 +144,10 @@
             <Form>frmCategorias</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\forms\uFrmDetalhesTarefa.pas">
+            <Form>frmDetalhesTarefa</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
