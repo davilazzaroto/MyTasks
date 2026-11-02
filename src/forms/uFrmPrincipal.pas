@@ -5,27 +5,33 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids, Vcl.Menus;
+  Vcl.DBGrids, Vcl.Menus, Vcl.ExtCtrls;
 
 type
   TfrmPrincipal = class(TForm)
-    lblTitulo: TLabel;
-    edtTitulo: TEdit;
-    lblDescricao: TLabel;
-    memDescricao: TMemo;
-    btnSalvar: TButton;
-    btnExcluir: TButton;
-    btnEditar: TButton;
-    btnLimpar: TButton;
-    lblCategoria: TLabel;
-    edtCategoriaId: TEdit;
-    dbgTarefas: TDBGrid;
-    btnCategorias: TButton;
-    cmbFiltroStatus: TComboBox;
-    lblFiltrar: TLabel;
     popTarefas: TPopupMenu;
     mnuConcluir: TMenuItem;
     mnuReabrir: TMenuItem;
+    pnlCabecalho: TPanel;
+    pnlCadastro: TPanel;
+    pnlListagem: TPanel;
+    btnCategorias: TButton;
+    btnEditar: TButton;
+    btnExcluir: TButton;
+    btnLimpar: TButton;
+    btnSalvar: TButton;
+    edtCategoriaId: TEdit;
+    edtTitulo: TEdit;
+    lblCategoria: TLabel;
+    lblDescricao: TLabel;
+    lblTitulo: TLabel;
+    memDescricao: TMemo;
+    dbgTarefas: TDBGrid;
+    pnlFiltro: TPanel;
+    lblFiltrar: TLabel;
+    cmbFiltroStatus: TComboBox;
+    lblNomeSistema: TLabel;
+    lblSubtitulo: TLabel;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);

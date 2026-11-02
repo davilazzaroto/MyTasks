@@ -6,18 +6,24 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.Grids,
-  Vcl.DBGrids;
+  Vcl.DBGrids, Vcl.ExtCtrls;
 
 type
   TfrmConsultaCategorias = class(TForm)
-    lblPesquisa: TLabel;
+    pnlCabecalho: TPanel;
+    lblSubtituloConsulta: TLabel;
+    lblTituloConsulta: TLabel;
+    pnlPesquisa: TPanel;
     edtPesquisa: TEdit;
+    lblPesquisa: TLabel;
+    pnlRodape: TPanel;
+    btnFechar: TButton;
+    pnlListagem: TPanel;
     dbgCategorias: TDBGrid;
-    btnConfirmar: TButton;
-    btnCancelar: TButton;
+    lblRodape: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
-    procedure btnCancelarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
     procedure dbgCategoriasDblClick(Sender: TObject);
     procedure edtPesquisaChange(Sender: TObject);
   private
@@ -54,7 +60,7 @@ begin
   end;
 end;
 
-procedure TfrmConsultaCategorias.btnCancelarClick(Sender: TObject);
+procedure TfrmConsultaCategorias.btnFecharClick(Sender: TObject);
 begin
   // Fecha a consulta sem retornar uma categoria.
   ModalResult := mrCancel;

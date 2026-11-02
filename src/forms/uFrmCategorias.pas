@@ -5,19 +5,24 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids;
+  Vcl.DBGrids, Vcl.ExtCtrls;
 
 type
   TfrmCategorias = class(TForm)
-    lblNome: TLabel;
-    edtNome: TEdit;
-    btnSalvar: TButton;
-    btnExcluir: TButton;
+    pnlCabecalho: TPanel;
+    lblTituloPagina: TLabel;
+    pnlCadastro: TPanel;
     btnEditar: TButton;
+    btnExcluir: TButton;
     btnLimpar: TButton;
-    dbgCategorias: TDBGrid;
+    btnSalvar: TButton;
+    edtNome: TEdit;
     lblDescricao: TLabel;
+    lblNome: TLabel;
     memDescricao: TMemo;
+    lblSubtituloPagina: TLabel;
+    pnlListagem: TPanel;
+    dbgCategorias: TDBGrid;
     procedure btnSalvarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
