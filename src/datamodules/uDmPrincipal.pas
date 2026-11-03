@@ -34,6 +34,7 @@ type
     procedure qryListarCategoriasBeforeDelete(DataSet: TDataSet);
   private
     procedure CarregarConfiguracoes;
+    procedure VerificarBanco;
   public
     function CategoriaExiste(ACategoriaId: Integer): Boolean;
   end;
@@ -120,11 +121,34 @@ begin
     );
 end;
 
+procedure TdmPrincipal.VerificarBanco;
+var
+  CaminhoBanco: string;
+  Servidor: string;
+begin
+  CaminhoBanco := Trim(conBanco.Params.Database);
+  Servidor := Trim(conBanco.Params.Values['Server']);
+
+  // A verificação de arquivo é válida apenas para bancos locais.
+  if not SameText(Servidor, 'localhost') and
+     (Servidor <> '127.0.0.1') then
+    Exit;
+
+  // Verifica se o arquivo do banco existe.
+  if not FileExists(CaminhoBanco) then
+  begin
+    raise Exception.Create(
+      'Banco de dados não encontrado!' + sLineBreak +
+      'Caminho configurado: ' + CaminhoBanco
+    );
+  end;
+end;
+
 procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
 begin
   CarregarConfiguracoes;
+  VerificarBanco;
 
-  // Tenta estabelecer a conexão com o Firebird.
   try
     conBanco.Connected := True;
   except

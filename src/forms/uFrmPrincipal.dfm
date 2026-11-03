@@ -25,7 +25,7 @@ object frmPrincipal: TfrmPrincipal
     BevelOuter = bvNone
     TabOrder = 2
     ExplicitWidth = 957
-    ExplicitHeight = 237
+    ExplicitHeight = 209
     object dbgTarefas: TDBGrid
       Left = 0
       Top = 0
@@ -103,7 +103,7 @@ object frmPrincipal: TfrmPrincipal
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 80
+    ExplicitWidth = 957
     object lblCategoria: TLabel
       Left = 400
       Top = 52
@@ -251,7 +251,7 @@ object frmPrincipal: TfrmPrincipal
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -8
+    ExplicitWidth = 957
     object lblNomeSistema: TLabel
       Left = 88
       Top = 9
@@ -335,7 +335,7 @@ object frmPrincipal: TfrmPrincipal
       Left = 632
       Top = 16
       Width = 57
-      Height = 33
+      Height = 28
       Caption = 'Filtrar:'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
@@ -381,11 +381,12 @@ object frmPrincipal: TfrmPrincipal
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitTop = 611
+    ExplicitTop = 609
+    ExplicitWidth = 957
     object lblRodape: TLabel
       Left = 8
       Top = 6
-      Width = 505
+      Width = 495
       Height = 23
       Caption = 
         'Duplo clique para detalhes '#8226' Bot'#227'o direito para alterar a situa'#231 +
