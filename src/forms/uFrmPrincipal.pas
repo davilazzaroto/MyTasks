@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
   Vcl.DBGrids, Vcl.Menus, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
   Vcl.VirtualImageList, Vcl.BaseImageCollection, Vcl.ImageCollection,
-  Vcl.Imaging.pngimage;
+  Vcl.Imaging.pngimage,System.IniFiles;
 
 type
   TfrmPrincipal = class(TForm)

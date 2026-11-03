@@ -24,3 +24,6 @@ __history/
 # Configurações privadas
 .env
 *.local.ini
+
+# Configuração local do banco
+config.ini

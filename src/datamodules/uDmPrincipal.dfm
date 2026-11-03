@@ -141,6 +141,7 @@ object dmPrincipal: TdmPrincipal
       end>
   end
   object qryListarCategorias: TFDQuery
+    BeforeDelete = qryListarCategoriasBeforeDelete
     Connection = conBanco
     SQL.Strings = (
       'SELECT'

@@ -103,8 +103,7 @@ object frmPrincipal: TfrmPrincipal
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = -8
-    ExplicitTop = 81
+    ExplicitTop = 80
     object lblCategoria: TLabel
       Left = 400
       Top = 52
@@ -535,8 +534,8 @@ object frmPrincipal: TfrmPrincipal
               D0F000428CAC898C0000000049454E44AE426082}
           end>
       end>
-    Left = 568
-    Top = 320
+    Left = 576
+    Top = 312
   end
   object imgLista: TVirtualImageList
     Images = <
@@ -568,7 +567,7 @@ object frmPrincipal: TfrmPrincipal
     ImageCollection = imgCollection
     Width = 24
     Height = 24
-    Left = 640
-    Top = 320
+    Left = 648
+    Top = 312
   end
 end

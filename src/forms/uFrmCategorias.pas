@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Vcl.Grids,
-  Vcl.DBGrids, Vcl.ExtCtrls;
+  Vcl.DBGrids, Vcl.ExtCtrls, System.ImageList, Vcl.ImgList,
+  Vcl.BaseImageCollection, Vcl.ImageCollection, Vcl.VirtualImageList;
 
 type
   TfrmCategorias = class(TForm)
@@ -23,6 +24,8 @@ type
     lblSubtituloPagina: TLabel;
     pnlListagem: TPanel;
     dbgCategorias: TDBGrid;
+    imgCollection: TImageCollection;
+    imgList: TVirtualImageList;
     procedure btnSalvarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);

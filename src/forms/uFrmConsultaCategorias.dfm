@@ -23,6 +23,7 @@ object frmConsultaCategorias: TfrmConsultaCategorias
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitWidth = 618
     object lblSubtituloConsulta: TLabel
       Left = 17
       Top = 50
@@ -58,6 +59,7 @@ object frmConsultaCategorias: TfrmConsultaCategorias
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 618
     object lblPesquisa: TLabel
       Left = 17
       Top = -2
@@ -75,8 +77,15 @@ object frmConsultaCategorias: TfrmConsultaCategorias
       Left = 17
       Top = 27
       Width = 603
-      Height = 30
+      Height = 31
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -17
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
       TabOrder = 0
+      TextHint = 'Informe uma Categoria'
       OnChange = edtPesquisaChange
     end
   end
@@ -88,7 +97,6 @@ object frmConsultaCategorias: TfrmConsultaCategorias
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 399
     DesignSize = (
       620
       65)
@@ -114,6 +122,7 @@ object frmConsultaCategorias: TfrmConsultaCategorias
       ParentFont = False
       TabOrder = 0
       OnClick = btnFecharClick
+      ExplicitWidth = 113
     end
   end
   object pnlListagem: TPanel
@@ -124,10 +133,8 @@ object frmConsultaCategorias: TfrmConsultaCategorias
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitLeft = 427
-    ExplicitTop = 319
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    ExplicitWidth = 618
+    ExplicitHeight = 222
     object dbgCategorias: TDBGrid
       Left = 0
       Top = 0

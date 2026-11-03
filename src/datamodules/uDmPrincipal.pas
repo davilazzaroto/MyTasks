@@ -8,7 +8,7 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
   FireDAC.Phys.IBBase, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet;
+  FireDAC.DApt, FireDAC.Comp.DataSet,System.IniFiles;
 
 type
   TdmPrincipal = class(TDataModule)
@@ -31,8 +31,9 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure qryListarCategoriasCadastroBeforeDelete(DataSet: TDataSet);
     procedure qryListarTarefasBeforeDelete(DataSet: TDataSet);
+    procedure qryListarCategoriasBeforeDelete(DataSet: TDataSet);
   private
-    { Private declarations }
+    procedure CarregarConfiguracoes;
   public
     function CategoriaExiste(ACategoriaId: Integer): Boolean;
   end;
@@ -62,10 +63,21 @@ begin
   end;
 end;
 
-procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
+procedure TdmPrincipal.CarregarConfiguracoes;
 var
+  Config: TIniFile;
+  CaminhoIni: string;
   SenhaBanco: string;
 begin
+  // Localiza o INI na pasta do executável.
+  CaminhoIni := ExtractFilePath(ParamStr(0)) + 'config.ini';
+
+  if not FileExists(CaminhoIni) then
+    raise Exception.Create(
+      'Arquivo config.ini não encontrado em: ' + CaminhoIni
+    );
+
+  // Recupera a senha da variável de ambiente.
   SenhaBanco := GetEnvironmentVariable('MYTASKS_DB_PASSWORD');
 
   if SenhaBanco = '' then
@@ -73,18 +85,69 @@ begin
       'Variável MYTASKS_DB_PASSWORD não configurada.'
     );
 
-  conBanco.Params.Password := SenhaBanco;
+  Config := TIniFile.Create(CaminhoIni);
+  try
+    conBanco.Connected := False;
+    conBanco.LoginPrompt := False;
 
+    conBanco.Params.Clear;
+    conBanco.Params.DriverID := 'FB';
+    conBanco.Params.Values['Protocol'] := 'TCPIP';
+
+    conBanco.Params.Values['Server'] :=
+      Config.ReadString('Database', 'Server', 'localhost');
+
+    conBanco.Params.Values['Port'] :=
+      Config.ReadString('Database', 'Port', '3050');
+
+    conBanco.Params.Database :=
+      Config.ReadString('Database', 'Path', '');
+
+    conBanco.Params.UserName :=
+      Config.ReadString('Database', 'User', 'SYSDBA');
+
+    conBanco.Params.Password := SenhaBanco;
+    conBanco.Params.Values['CharacterSet'] := 'UTF8';
+    conBanco.Params.Values['SQLDialect'] := '3';
+
+  finally
+    Config.Free;
+  end;
+
+  if Trim(conBanco.Params.Database) = '' then
+    raise Exception.Create(
+      'Caminho do banco não informado no config.ini.'
+    );
+end;
+
+procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
+begin
+  CarregarConfiguracoes;
+
+  // Tenta estabelecer a conexão com o Firebird.
   try
     conBanco.Connected := True;
   except
     on E: Exception do
       raise Exception.Create(
-        'Não foi possível conectar ao Firebird: ' + E.Message
+        'Não foi possível conectar ao Firebird.' +
+        sLineBreak + E.Message
       );
+  end;
+end;
 
-      end;
-    end;
+procedure TdmPrincipal.qryListarCategoriasBeforeDelete(DataSet: TDataSet);
+begin
+  // Impedir exclusões realizadas diretamente pelo DBGrid.
+  Abort;
+end;
+
+procedure TdmPrincipal.qryListarTarefasBeforeDelete(DataSet: TDataSet);
+begin
+  // Impedir exclusões realizadas diretamente pelo DBGrid.
+  Abort;
+end;
+
 procedure TdmPrincipal.qryListarCategoriasCadastroBeforeDelete(
   DataSet: TDataSet);
 begin
@@ -92,10 +155,5 @@ begin
   Abort;
 end;
 
-procedure TdmPrincipal.qryListarTarefasBeforeDelete(DataSet: TDataSet);
-begin
-  // Impedir exclusões realizadas diretamente pelo DBGrid.
-  Abort
-end;
 
 end.
