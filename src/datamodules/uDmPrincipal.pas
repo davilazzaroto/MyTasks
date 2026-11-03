@@ -8,7 +8,7 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
   FireDAC.Phys.IBBase, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet,System.IniFiles;
+  FireDAC.DApt, FireDAC.Comp.DataSet,System.IniFiles,Vcl.Dialogs,System.UITypes;
 
 type
   TdmPrincipal = class(TDataModule)
@@ -35,6 +35,8 @@ type
   private
     procedure CarregarConfiguracoes;
     procedure VerificarBanco;
+    procedure CriarBanco;
+
   public
     function CategoriaExiste(ACategoriaId: Integer): Boolean;
   end;
@@ -129,20 +131,69 @@ begin
   CaminhoBanco := Trim(conBanco.Params.Database);
   Servidor := Trim(conBanco.Params.Values['Server']);
 
-  // A verificação de arquivo é válida apenas para bancos locais.
+  // Para conexões remotas, o caminho pertence ao servidor.
   if not SameText(Servidor, 'localhost') and
-     (Servidor <> '127.0.0.1') then
+     not SameText(Servidor, '127.0.0.1') then
     Exit;
 
-  // Verifica se o arquivo do banco existe.
-  if not FileExists(CaminhoBanco) then
-  begin
+  // Se o banco já existe, continua normalmente.
+  if FileExists(CaminhoBanco) then
+    Exit;
+
+  // Solicita confirmação antes de criar um banco novo.
+  if MessageDlg(
+    'O banco de dados do MyTasks não foi encontrado.' +
+    sLineBreak + sLineBreak +
+    'Caminho: ' + CaminhoBanco +
+    sLineBreak + sLineBreak +
+    'Deseja criar um novo banco de dados?',
+    mtConfirmation,
+    [mbYes, mbNo],
+    0
+  ) <> mrYes then
     raise Exception.Create(
-      'Banco de dados não encontrado!' + sLineBreak +
-      'Caminho configurado: ' + CaminhoBanco
+      'Inicialização cancelada. Banco de dados não encontrado.'
     );
+
+  // Cria o banco somente após a confirmação.
+  CriarBanco;
+end;
+
+procedure TdmPrincipal.CriarBanco;
+var
+  CaminhoBanco: string;
+  PastaBanco: string;
+begin
+  CaminhoBanco := Trim(conBanco.Params.Database);
+  PastaBanco := ExtractFilePath(CaminhoBanco);
+
+  // Cria a pasta do banco, caso ainda não exista.
+  if not DirectoryExists(PastaBanco) then
+  begin
+    if not ForceDirectories(PastaBanco) then
+      raise Exception.Create(
+        'Não foi possível criar a pasta: ' + PastaBanco
+      );
+  end;
+
+  // Evita tentar criar um banco que já existe.
+  if FileExists(CaminhoBanco) then
+    raise Exception.Create(
+      'Já existe um arquivo no caminho informado: ' + CaminhoBanco
+    );
+
+  // Solicita ao Firebird a criação de um novo banco.
+  conBanco.Params.Values['CreateDatabase'] := 'Yes';
+
+  try
+    conBanco.Connected := True;
+    conBanco.Connected := False;
+  finally
+    // Remove o parâmetro para as próximas conexões.
+    conBanco.Params.Values['CreateDatabase'] := '';
   end;
 end;
+
 
 procedure TdmPrincipal.DataModuleCreate(Sender: TObject);
 begin
