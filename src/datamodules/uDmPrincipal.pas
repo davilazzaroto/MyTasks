@@ -8,7 +8,8 @@ uses
   FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait,
   Data.DB, FireDAC.Comp.Client, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
   FireDAC.Phys.IBBase, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
-  FireDAC.DApt, FireDAC.Comp.DataSet,System.IniFiles,Vcl.Dialogs,System.UITypes;
+  FireDAC.DApt, FireDAC.Comp.DataSet,System.IniFiles,Vcl.Dialogs,System.UITypes,
+  FireDAC.Comp.Script,FireDAC.Comp.ScriptCommands;
 
 type
   TdmPrincipal = class(TDataModule)
@@ -36,6 +37,7 @@ type
     procedure CarregarConfiguracoes;
     procedure VerificarBanco;
     procedure CriarBanco;
+    procedure CriarEstruturaBanco;
 
   public
     function CategoriaExiste(ACategoriaId: Integer): Boolean;
@@ -159,6 +161,44 @@ begin
   CriarBanco;
 end;
 
+procedure TdmPrincipal.CriarEstruturaBanco;
+var
+  Script: TFDScript;
+  PastaScripts: string;
+begin
+  PastaScripts := ExtractFilePath(ParamStr(0)) + 'scripts\';
+
+  if not FileExists(PastaScripts + '01_categorias.sql') or
+     not FileExists(PastaScripts + '02_tarefas.sql') then
+    raise Exception.Create(
+      'Os scripts de criação do banco não foram encontrados.'
+    );
+
+  Script := TFDScript.Create(nil);
+  try
+    Script.Connection := conBanco;
+
+    // Primeiro cria a tabela de categorias.
+    Script.SQLScripts.Clear;
+    Script.SQLScripts.Add;
+    Script.SQLScripts[0].SQL.LoadFromFile(
+      PastaScripts + '01_categorias.sql'
+    );
+    Script.ExecuteAll;
+
+    // Depois cria a tabela de tarefas.
+    Script.SQLScripts.Clear;
+    Script.SQLScripts.Add;
+    Script.SQLScripts[0].SQL.LoadFromFile(
+      PastaScripts + '02_tarefas.sql'
+    );
+    Script.ExecuteAll;
+
+  finally
+    Script.Free;
+  end;
+end;
+
 procedure TdmPrincipal.CriarBanco;
 var
   CaminhoBanco: string;
@@ -176,6 +216,8 @@ begin
       );
   end;
 
+
+
   // Evita tentar criar um banco que já existe.
   if FileExists(CaminhoBanco) then
     raise Exception.Create(
@@ -185,13 +227,23 @@ begin
   // Solicita ao Firebird a criação de um novo banco.
   conBanco.Params.Values['CreateDatabase'] := 'Yes';
 
-  try
-    conBanco.Connected := True;
-    conBanco.Connected := False;
-  finally
-    // Remove o parâmetro para as próximas conexões.
-    conBanco.Params.Values['CreateDatabase'] := '';
-  end;
+try
+  // Cria o arquivo físico do banco.
+  conBanco.Connected := True;
+finally
+  conBanco.Connected := False;
+
+  // Remove o parâmetro utilizado na criação.
+  conBanco.Params.Values['CreateDatabase'] := '';
+end;
+
+// Abre o banco recém-criado para executar os scripts.
+conBanco.Connected := True;
+try
+  CriarEstruturaBanco;
+finally
+  conBanco.Connected := False;
+end;
 end;
 
 
