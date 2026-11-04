@@ -1,58 +1,67 @@
 # MyTasks — Gerenciador de Tarefas
 
-O **MyTasks** é uma aplicação desktop desenvolvida em Delphi para gerenciamento de tarefas pessoais, permitindo cadastrar, consultar, editar, excluir e acompanhar tarefas de forma simples e organizada.
+O **MyTasks** é uma aplicação desktop desenvolvida em Delphi para gerenciamento de tarefas pessoais. O sistema permite cadastrar, consultar, editar, excluir e acompanhar tarefas por meio de uma interface simples e organizada.
 
-O projeto foi criado com o objetivo de praticar o desenvolvimento de aplicações desktop utilizando **Delphi, VCL, FireDAC e Firebird**, explorando conceitos como programação orientada a objetos, operações CRUD, validação de dados, consultas SQL e organização do código.
+O projeto foi desenvolvido como forma de praticar **Delphi, Object Pascal, VCL, FireDAC e Firebird**, aplicando conceitos de programação orientada a objetos, operações CRUD, consultas SQL, validações e organização de código.
 
-Além das funcionalidades de gerenciamento, o projeto também utiliza um arquivo externo de configuração para facilitar a conexão com diferentes bancos de dados.
+Um dos recursos implementados é a **criação automática do banco de dados**. Na primeira execução, caso o arquivo do banco não exista, o aplicativo pode criar a pasta, gerar o banco Firebird e executar os scripts necessários para preparar as tabelas.
 
 ## Funcionalidades
 
 ### Gerenciamento de tarefas
+
 - Cadastro de tarefas com título, descrição e categoria.
 - Listagem das tarefas cadastradas.
 - Edição e exclusão de tarefas.
-- Alteração da situação das tarefas entre pendente e concluída.
-- Filtro de tarefas por situação: todas, pendentes ou concluídas.
-- Visualização dos detalhes de uma tarefa por meio de duplo clique.
-- Validação dos campos antes de salvar os registros.
+- Alteração da situação entre pendente e concluída.
+- Filtro por situação: todas, pendentes ou concluídas.
+- Visualização dos detalhes por meio de duplo clique.
+- Validação dos campos antes de salvar.
 
 ### Gerenciamento de categorias
-- Cadastro de categorias.
-- Consulta e listagem das categorias cadastradas.
-- Edição e exclusão de categorias.
-- Pesquisa de categorias por nome ou código.
+
+- Cadastro, edição e exclusão de categorias.
+- Listagem e consulta das categorias cadastradas.
+- Pesquisa por nome ou código.
 - Seleção de categorias por meio de uma janela de consulta.
 
 ### Interface
+
 - Interface gráfica desenvolvida com VCL.
-- Organização das funcionalidades em formulários.
-- Utilização de tabelas (`TDBGrid`) para exibição dos registros.
+- Formulários separados por funcionalidade.
+- Utilização de `TDBGrid` para exibição dos registros.
 - Menus de contexto para alteração da situação das tarefas.
 - Ícones e elementos visuais para facilitar a navegação.
 
 ### Banco de dados
+
 - Persistência de dados utilizando Firebird.
-- Comunicação com o banco por meio do FireDAC.
+- Integração com o banco por meio do FireDAC.
 - Consultas SQL parametrizadas.
-- Configuração externa da conexão utilizando um arquivo `config.ini`.
-- Verificação da existência do arquivo do banco em conexões locais.
+- Configuração externa da conexão por meio do `config.ini`.
+- Senha recuperada de uma variável de ambiente.
+- Verificação da existência do banco em conexões locais.
+- Criação automática do arquivo `.FDB`, mediante confirmação.
+- Criação da pasta do banco, quando necessário.
+- Execução automática dos scripts SQL para criação das tabelas e relacionamentos.
 
 ## Tecnologias utilizadas
 
 | Tecnologia | Utilização |
 |---|---|
-| Delphi 12 | Linguagem e ambiente de desenvolvimento |
+| Delphi 12 | Ambiente de desenvolvimento |
 | Object Pascal | Implementação das funcionalidades |
-| VCL | Desenvolvimento da interface gráfica |
-| Firebird 2.5 | Banco de dados relacional |
-| FireDAC | Conexão e comunicação com o banco |
-| SQL | Consultas e manipulação dos registros |
+| VCL | Interface gráfica desktop |
+| Firebird 3.0+ | Banco de dados relacional |
+| FireDAC | Conexão e manipulação dos dados |
+| SQL | Consultas e estrutura do banco |
 | Git e GitHub | Versionamento do projeto |
+
+**Observação:** os scripts atuais utilizam colunas `IDENTITY`, disponíveis a partir do Firebird 3.0. Recomenda-se utilizar uma versão compatível e verificar a versão efetivamente testada no projeto.
 
 ## Estrutura do projeto
 
-O projeto está organizado em unidades com responsabilidades específicas.
+O código está organizado em unidades com responsabilidades específicas.
 
 ```text
 MyTasks/
@@ -69,35 +78,42 @@ MyTasks/
 │   └── utils/
 │       └── uValidacoes.pas
 │
+├── database/
+│   └── scripts/
+│       ├── 01_categorias.sql
+│       └── 02_tarefas.sql
+│
 ├── README.md
 └── ...
 ```
 
-**Principais unidades:**
+### Principais unidades
 
-- `uFrmPrincipal`: formulário principal, responsável pelo gerenciamento das tarefas.
-- `uFrmCategorias`: formulário de cadastro e manutenção das categorias.
-- `uFrmConsultaCategorias`: consulta e seleção de categorias.
-- `uFrmDetalhesTarefa`: visualização detalhada das informações de uma tarefa.
-- `uDmPrincipal`: gerenciamento da conexão com o Firebird e dos componentes de acesso aos dados.
-- `uValidacoes`: funções reutilizáveis para validação dos campos.
+- **uFrmPrincipal:** gerenciamento das tarefas, filtros e operações de cadastro.
+- **uFrmCategorias:** cadastro e manutenção das categorias.
+- **uFrmConsultaCategorias:** pesquisa e seleção de categorias.
+- **uFrmDetalhesTarefa:** visualização das informações de uma tarefa.
+- **uDmPrincipal:** conexão com o Firebird, consultas e inicialização do banco de dados.
+- **uValidacoes:** funções reutilizáveis para validação dos campos.
 
 ## Requisitos
 
-Para executar o projeto, são necessários:
+Para executar o MyTasks, são necessários:
 
 - Windows.
-- Firebird Server instalado e em execução.
-- Banco de dados do MyTasks previamente criado e com as tabelas necessárias.
+- Firebird Server compatível, instalado e em execução.
 - Biblioteca `fbclient.dll` compatível com a arquitetura do executável.
 - Arquivo `config.ini` configurado.
 - Variável de ambiente `MYTASKS_DB_PASSWORD` definida.
+- Scripts SQL disponíveis na pasta `scripts` ao lado do executável, para a criação de um banco novo.
 
-Para abrir, modificar e compilar o código-fonte, é necessário ter o **Delphi 12** instalado, com suporte aos componentes VCL e FireDAC.
+**Não é necessário criar manualmente o banco ou as tabelas na primeira execução local.** O aplicativo oferece essa opção automaticamente.
+
+Para abrir, modificar e compilar o código-fonte, é necessário ter o Delphi 12 com suporte a VCL e FireDAC.
 
 ## Instalação e configuração
 
-### 1. Obter o projeto
+### 1. Baixar o projeto
 
 Clone o repositório utilizando o Git:
 
@@ -105,47 +121,45 @@ Clone o repositório utilizando o Git:
 git clone URL_DO_REPOSITORIO
 ```
 
-Ou utilize a opção **Code → Download ZIP** no GitHub para baixar os arquivos.
+Ou acesse o repositório no GitHub e selecione **Code → Download ZIP**.
 
-Se o repositório contiver apenas o código-fonte, será necessário abrir o projeto no Delphi e compilá-lo.
+Caso não exista um executável disponibilizado na seção de Releases, será necessário abrir o projeto no Delphi e compilá-lo.
 
 ### 2. Instalar o Firebird
 
-O MyTasks utiliza o Firebird como sistema gerenciador de banco de dados.
+O MyTasks utiliza o Firebird como gerenciador de banco de dados.
 
-Para executar a aplicação, instale o Firebird Server compatível com o banco utilizado.
-
-Site oficial:
+Faça o download pelo site oficial:
 
 https://firebirdsql.org/
 
-O projeto foi desenvolvido e testado utilizando o **Firebird 2.5**.
-
-Após a instalação, verifique se o serviço do Firebird está em execução.
+Instale uma versão compatível com os scripts SQL do projeto e verifique se o serviço do Firebird está em execução.
 
 A porta padrão utilizada é `3050`.
 
-### 3. Configurar o banco de dados
+### 3. Preparar os arquivos da aplicação
 
-O aplicativo utiliza um banco Firebird com as seguintes tabelas principais:
+Para executar o MyTasks, organize os arquivos da seguinte maneira:
 
-**CATEGORIAS**
+```text
+MyTasks/
+├── Gerenciador_Tarefas.exe
+├── config.ini
+├── fbclient.dll
+└── scripts/
+    ├── 01_categorias.sql
+    └── 02_tarefas.sql
+```
 
-Armazena as categorias utilizadas para organizar as tarefas.
+Os arquivos SQL são utilizados para preparar automaticamente a estrutura de um banco novo.
 
-**TAREFAS**
+O aplicativo precisa ter acesso aos scripts durante a primeira inicialização.
 
-Armazena as tarefas cadastradas, incluindo título, descrição, data de criação, situação e categoria vinculada.
+### 4. Configurar o config.ini
 
-O banco deve estar previamente criado e com sua estrutura configurada antes da primeira execução.
+Crie um arquivo chamado `config.ini` na mesma pasta do executável.
 
-**Importante:** a criação automática do banco e das tabelas ainda não está disponível nesta versão.
-
-### 4. Configurar o arquivo config.ini
-
-O MyTasks utiliza um arquivo `config.ini` para armazenar as informações necessárias à conexão com o banco de dados.
-
-Crie um arquivo chamado `config.ini` na mesma pasta do executável, com o seguinte conteúdo:
+Exemplo:
 
 ```ini
 [Database]
@@ -155,26 +169,26 @@ Path=D:\MyTasks\Dados\MYTASKS.FDB
 User=SYSDBA
 ```
 
-**Descrição dos parâmetros:**
-
 | Parâmetro | Descrição |
 |---|---|
 | Server | Endereço do servidor Firebird |
-| Port | Porta utilizada pelo servidor |
-| Path | Caminho do arquivo do banco de dados |
-| User | Usuário utilizado na conexão |
+| Port | Porta de conexão |
+| Path | Caminho do arquivo `.FDB` |
+| User | Usuário do banco de dados |
 
-O caminho informado em `Path` é apenas um exemplo e deve ser ajustado conforme o local em que o banco está armazenado.
+O caminho informado é apenas um exemplo.
 
-Caso o banco seja movido para outra pasta, basta atualizar o caminho no `config.ini`, sem necessidade de recompilar o aplicativo.
+Você pode utilizar outra pasta, desde que o Firebird tenha permissão para acessar o local.
 
-Para conexões remotas, o caminho informado deve corresponder ao local do banco no servidor Firebird.
+Caso o banco já exista em outro diretório, basta informar seu caminho em `Path`. Não é necessário recompilar o aplicativo.
 
-### 5. Configurar a senha do banco
+**Importante:** para conexões remotas, o caminho informado deve ser válido no computador que hospeda o Firebird. A criação automática de pastas e bancos foi implementada para conexões locais.
 
-Por segurança, a senha de conexão não é armazenada diretamente no arquivo `config.ini`.
+### 5. Configurar a senha do Firebird
 
-O aplicativo utiliza uma variável de ambiente chamada:
+Por segurança, a senha não é armazenada no `config.ini`.
+
+O MyTasks utiliza a variável de ambiente:
 
 ```text
 MYTASKS_DB_PASSWORD
@@ -190,37 +204,126 @@ No Windows, abra o PowerShell e execute:
 )
 ```
 
-Substitua `SUA_SENHA_FIREBIRD` pela senha correspondente ao usuário configurado no banco.
+Substitua `SUA_SENHA_FIREBIRD` pela senha do usuário configurado no Firebird.
 
-Depois de definir a variável, feche e abra novamente o Delphi ou o terminal utilizado para iniciar a aplicação, para que o novo ambiente seja reconhecido.
+Após definir a variável, feche e abra novamente o terminal ou o Delphi para que a configuração seja reconhecida.
 
-**Atenção:** não publique senhas reais, bancos com dados pessoais ou arquivos de configuração contendo credenciais no repositório.
+Não publique credenciais reais no GitHub.
 
-### 6. Configurar a biblioteca fbclient.dll
+### 6. Configurar a fbclient.dll
 
-A biblioteca `fbclient.dll` permite que o aplicativo se comunique com o Firebird.
+A biblioteca `fbclient.dll` permite a comunicação entre o aplicativo e o Firebird.
 
-Coloque uma versão compatível com o Firebird utilizado e com a arquitetura do executável na pasta da aplicação.
+Coloque uma versão compatível na mesma pasta do executável.
 
-Exemplo:
-
-```text
-MyTasks/
-├── MyTasks.exe
-├── config.ini
-└── fbclient.dll
-```
+A arquitetura da biblioteca deve corresponder à do aplicativo. Por exemplo, um executável Win32 precisa de uma biblioteca cliente de 32 bits.
 
 A biblioteca cliente não substitui a instalação do Firebird Server.
 
-### 7. Executar a aplicação
+### 7. Executar o MyTasks
 
-Com o Firebird instalado, o banco criado, o arquivo INI configurado e a variável de ambiente definida, execute o aplicativo.
+Com o Firebird instalado e os arquivos configurados, execute `Gerenciador_Tarefas.exe`.
 
-Na inicialização, o MyTasks:
+Na inicialização, o sistema:
 
-1. Localiza o arquivo `config.ini`.
-2. Lê os parâmetros de conexão.
-3. Recupera a senha da variável de ambiente.
-4. Verifica a existência do banco, quando configurado para uma conexão local.
-5. Estabelece a conexão com o Firebird.
+1. Localiza e lê o arquivo `config.ini`.
+2. Recupera a senha pela variável de ambiente.
+3. Verifica a existência do banco de dados, quando a conexão é local.
+4. Se o banco existir, conecta normalmente.
+5. Se o banco não existir, solicita confirmação para criá-lo.
+6. Após a confirmação, cria a pasta necessária e o arquivo `.FDB`.
+7. Executa os scripts SQL para criar as tabelas e os relacionamentos.
+8. Estabelece a conexão e disponibiliza as funcionalidades.
+
+Após esse processo, o sistema estará pronto para cadastrar categorias e tarefas.
+
+**Atenção:** se você já possui um banco com dados cadastrados, configure o caminho correto no INI. Não é necessário criar outro banco.
+
+## Estrutura do banco de dados
+
+O MyTasks utiliza duas tabelas principais.
+
+### CATEGORIAS
+
+Armazena as categorias utilizadas para organizar as tarefas.
+
+| Campo | Descrição |
+|---|---|
+| ID | Identificador da categoria |
+| NOME | Nome da categoria |
+| DESCRICAO | Descrição opcional |
+
+O campo `ID` possui geração automática, e o nome da categoria possui uma restrição de unicidade.
+
+### TAREFAS
+
+Armazena as informações das tarefas cadastradas.
+
+| Campo | Descrição |
+|---|---|
+| ID | Identificador da tarefa |
+| TITULO | Título da tarefa |
+| DESCRICAO | Descrição opcional |
+| CONCLUIDA | Situação da tarefa: 0 ou 1 |
+| DATA_CRIACAO | Data e hora do cadastro |
+| CATEGORIA_ID | Categoria vinculada à tarefa |
+
+A tabela `TAREFAS` possui uma chave estrangeira que referencia `CATEGORIAS`.
+
+Os scripts de criação estão disponíveis em `database/scripts`.
+
+## Validações implementadas
+
+O sistema realiza validações para evitar o cadastro de informações inválidas.
+
+Entre elas:
+
+- Título obrigatório.
+- Limite de 100 caracteres para o título.
+- Limite de 500 caracteres para a descrição.
+- Categoria obrigatória.
+- Código de categoria inteiro e positivo.
+- Verificação da existência da categoria.
+- Confirmação antes da exclusão de registros.
+- Tratamento de exceções nas operações de cadastro, edição e exclusão.
+
+As funções de validação reutilizáveis foram organizadas na unidade `uValidacoes`.
+
+## Conceitos praticados
+
+Durante o desenvolvimento, foram trabalhados conceitos como:
+
+- Programação orientada a objetos com Object Pascal.
+- Desenvolvimento de aplicações desktop.
+- Componentes VCL.
+- Organização de código em unidades.
+- DataModules.
+- Operações CRUD.
+- Consultas SQL parametrizadas.
+- Chaves primárias e estrangeiras.
+- Validação de dados.
+- Tratamento de exceções.
+- Leitura de arquivos INI.
+- Variáveis de ambiente.
+- Criação e inicialização de bancos de dados.
+- Execução de scripts SQL pelo FireDAC.
+- Versionamento com Git.
+
+## Melhorias futuras
+
+- [x] Configuração externa da conexão com o banco.
+- [x] Verificação da existência do banco.
+- [x] Criação automática do banco de dados.
+- [x] Criação das tabelas por meio de scripts SQL.
+- [ ] Melhorar o tratamento de falhas durante a inicialização do banco.
+- [ ] Adicionar uma verificação da estrutura do banco.
+- [ ] Realizar testes de distribuição em outros computadores.
+- [ ] Continuar aprimorando a interface gráfica.
+
+## Objetivo do projeto
+
+O MyTasks é um projeto pessoal desenvolvido para praticar Delphi e desenvolvimento de aplicações desktop integradas a bancos de dados.
+
+A proposta é evoluir a aplicação gradualmente, aplicando novos conhecimentos e melhorando a organização, a interface e as funcionalidades.
+
+O código-fonte está disponível para consulta e fins de estudo.
