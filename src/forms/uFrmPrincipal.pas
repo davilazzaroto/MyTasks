@@ -42,6 +42,8 @@ type
     imgCabecalho: TImage;
     pnlRodape: TPanel;
     lblRodape: TLabel;
+    cmbFiltroCategoria: TComboBox;
+    lblCategoriaFiltro: TLabel;
     procedure btnSalvarClick(Sender: TObject);
     procedure btnLimparClick(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
@@ -55,6 +57,7 @@ type
     procedure mnuReabrirClick(Sender: TObject);
     procedure popTarefasPopup(Sender: TObject);
     procedure dbgTarefasDblClick(Sender: TObject);
+    procedure cmbFiltroCategoriaChange(Sender: TObject);
   private
     FTarefaIdEdicao: Integer;
     FModoEdicao: Boolean;
@@ -66,6 +69,7 @@ type
     procedure AtualizarTarefa(ACategoriaId: Integer);
     procedure AtualizarListagem;
     procedure AlterarStatusTarefa(ANovoStatus: Integer);
+    procedure CarregarCategoriasFiltro;
   public
   end;
 
@@ -140,6 +144,11 @@ begin
   end;
 end;
 
+procedure TfrmPrincipal.cmbFiltroCategoriaChange(Sender: TObject);
+begin
+  AtualizarListagem;
+end;
+
 procedure TfrmPrincipal.cmbFiltroStatusChange(Sender: TObject);
 begin
   AtualizarListagem;
@@ -207,8 +216,9 @@ end;
 procedure TfrmPrincipal.AtualizarListagem;
 var
   StatusFiltro: Integer;
+  CategoriaFiltro: Integer;
 begin
-  // Identifica o filtro selecionado no ComboBox.
+  // Identifica a situação selecionada.
   case cmbFiltroStatus.ItemIndex of
     1: StatusFiltro := 0;  // Pendentes
     2: StatusFiltro := 1;  // Concluídas
@@ -216,11 +226,22 @@ begin
     StatusFiltro := -1;    // Todas
   end;
 
-  // Recarrega a listagem aplicando o filtro.
+  // Identifica a categoria selecionada.
+  CategoriaFiltro := -1;
+
+  if cmbFiltroCategoria.ItemIndex >= 0 then
+    CategoriaFiltro := NativeInt(
+      cmbFiltroCategoria.Items.Objects[cmbFiltroCategoria.ItemIndex]
+    );
+
+  // Atualiza a listagem aplicando os dois filtros.
   with dmPrincipal.qryListarTarefas do
   begin
     Close;
+
     ParamByName('STATUS').AsInteger := StatusFiltro;
+    ParamByName('CATEGORIA_ID').AsInteger := CategoriaFiltro;
+
     Open;
   end;
 end;
@@ -287,6 +308,40 @@ begin
     on E: Exception do
       ShowMessage('Erro ao alterar situação da tarefa: ' + E.Message);
   end;
+end;
+
+procedure TfrmPrincipal.CarregarCategoriasFiltro;
+begin
+  cmbFiltroCategoria.Items.Clear;
+
+  // Opção para exibir tarefas de todas as categorias.
+  cmbFiltroCategoria.Items.AddObject(
+    'Todas as categorias',
+    TObject(NativeInt(-1))
+  );
+
+  with dmPrincipal.qryListarCategorias do
+  begin
+    Close;
+
+    // Retorna todas as categorias cadastradas.
+    ParamByName('PESQUISA').AsString := '%';
+
+    Open;
+    First;
+
+    while not Eof do
+    begin
+      cmbFiltroCategoria.Items.AddObject(
+        FieldByName('NOME').AsString,
+        TObject(NativeInt(FieldByName('ID').AsInteger))
+      );
+
+      Next;
+    end;
+  end;
+
+  cmbFiltroCategoria.ItemIndex := 0;
 end;
 
 procedure TfrmPrincipal.btnCategoriasClick(Sender: TObject);
@@ -472,6 +527,7 @@ end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
 begin
+  CarregarCategoriasFiltro;
   AtualizarListagem;
 end;
 

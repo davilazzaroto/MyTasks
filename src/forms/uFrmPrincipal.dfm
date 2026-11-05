@@ -332,7 +332,7 @@ object frmPrincipal: TfrmPrincipal
     TabOrder = 3
     ExplicitWidth = 957
     object lblFiltrar: TLabel
-      Left = 632
+      Left = 663
       Top = 16
       Width = 57
       Height = 28
@@ -357,20 +357,42 @@ object frmPrincipal: TfrmPrincipal
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object lblCategoriaFiltro: TLabel
+      Left = 347
+      Top = 16
+      Width = 96
+      Height = 33
+      Caption = 'Categoria:'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -20
+      Font.Name = 'Segoe UI'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
     object cmbFiltroStatus: TComboBox
-      Left = 695
+      Left = 726
       Top = 18
       Width = 180
       Height = 31
       Style = csDropDownList
       ItemIndex = 0
-      TabOrder = 0
+      TabOrder = 1
       Text = 'Todas'
       OnChange = cmbFiltroStatusChange
       Items.Strings = (
         'Todas'
         'Pendentes '
         'Conclu'#237'das')
+    end
+    object cmbFiltroCategoria: TComboBox
+      Left = 449
+      Top = 18
+      Width = 184
+      Height = 31
+      Style = csDropDownList
+      TabOrder = 0
+      OnChange = cmbFiltroCategoriaChange
     end
   end
   object pnlRodape: TPanel

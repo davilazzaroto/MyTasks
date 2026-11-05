@@ -69,6 +69,7 @@ object dmPrincipal: TdmPrincipal
       'FROM TAREFAS T'
       'LEFT JOIN CATEGORIAS C ON C.ID = T.CATEGORIA_ID'
       'WHERE (:STATUS = -1 OR T.CONCLUIDA = :STATUS)'
+      '  AND (:CATEGORIA_ID = -1 OR T.CATEGORIA_ID = :CATEGORIA_ID)'
       'ORDER BY T.ID DESC')
     Left = 448
     Top = 24
@@ -77,6 +78,10 @@ object dmPrincipal: TdmPrincipal
         Name = 'STATUS'
         ParamType = ptInput
         Value = Null
+      end
+      item
+        Name = 'CATEGORIA_ID'
+        ParamType = ptInput
       end>
   end
   object dsTarefas: TDataSource
